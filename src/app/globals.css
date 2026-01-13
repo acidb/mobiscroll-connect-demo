@@ -1,0 +1,384 @@
+@import 'tailwindcss/utilities';
+
+body {
+  background: white;
+  color: black;
+  margin: 0;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px 5px 5px 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.1s ease;
+  min-width: 120px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.logout {
+  background-color: #dc3545;
+}
+
+button.back {
+  background-color: #6c757d;
+}
+
+button.refresh {
+  background-color: #007bff;
+}
+
+button.toggle-config-btn {
+  background-color: #2d3748;
+  font-size: 15px;
+}
+
+button.toggle-config-btn:hover {
+  background-color: rgb(35, 43, 57);
+  opacity: 1;
+}
+
+button.google {
+  background-color: #fff;
+  color: #444;
+  border: 1px solid #ddd;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+button.google:hover {
+  background-color: #f7f7f7;
+  opacity: 1;
+}
+
+button.google img {
+  width: 18px;
+  height: 18px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 1em;
+}
+
+.status-section {
+  margin: 2em 0;
+}
+
+.status-section h2 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-indicator.status-connected {
+  background-color: #28a745;
+  box-shadow: 0 0 6px rgba(40, 167, 69, 0.5);
+}
+
+.status-indicator.status-disconnected {
+  background-color: #dc3545;
+  box-shadow: 0 0 6px rgba(220, 53, 69, 0.5);
+}
+
+.token-display {
+  max-width: 100%;
+  word-break: break-all;
+  margin: 1em 0;
+  padding: 0.75em;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.token-display code {
+  white-space: normal;
+}
+
+.loading {
+  text-align: center;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 1em;
+  border-radius: 4px;
+  margin: 1em 0;
+}
+
+.api-info-compact {
+  background: #f8f9fa;
+  border: 1px solid #e1e1e1;
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 1em;
+}
+
+.api-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.api-badge.api-method {
+  background: #28a745;
+  color: white;
+}
+
+.api-url {
+  color: #0366d6;
+  font-weight: 500;
+  flex: 1;
+  min-width: 200px;
+  word-break: break-all;
+}
+
+.api-params {
+  color: #6a737d;
+  font-size: 12px;
+}
+
+.api-params-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  flex: 1 1 100%;
+  margin-top: 4px;
+}
+
+.api-params-label {
+  color: #586069;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.api-params-wrapper .api-params {
+  margin: 0;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  flex: 1;
+  font-size: 11px;
+  line-height: 1.4;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.config-section {
+  background: #f8f9fa;
+  padding: 1.5em;
+  border-radius: 8px;
+  border: 1px solid #e1e1e1;
+}
+
+.config-section h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1em;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3em;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background-color: #fff;
+  color: #333;
+}
+
+.form-group small {
+  display: block;
+  color: #666;
+  margin-top: 0.3em;
+}
+
+.save-config-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 0.6em 1.2em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.save-config-btn:hover {
+  background-color: #218838;
+}
+
+.config-saved {
+  color: #28a745;
+  margin-left: 1em;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: black;
+    color: white;
+  }
+
+  .api-info-compact {
+    background: #1a1a1a;
+    border-color: #444;
+  }
+
+  .api-url {
+    color: #58a6ff;
+  }
+
+  .api-params {
+    color: #8b949e;
+  }
+
+  .api-params-label {
+    color: #c9d1d9;
+  }
+
+  .api-params-wrapper .api-params {
+    background: #0d1117;
+    border-color: #30363d;
+    color: #c9d1d9;
+  }
+
+  .token-display {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+
+  .config-section {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+
+  .config-section h3 {
+    color: #e2e8f0;
+  }
+
+  .form-group label {
+    color: #e2e8f0;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background-color: #1a202c;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+
+  .form-group input::placeholder,
+  .form-group select::placeholder,
+  .form-group textarea::placeholder {
+    color: #718096;
+  }
+
+  .form-group small {
+    color: #a0aec0;
+  }
+
+  .save-config-btn {
+    background-color: #38a169;
+  }
+
+  .save-config-btn:hover {
+    background-color: #2f855a;
+  }
+
+  .config-saved {
+    color: #68d391;
+  }
+}
+
+@media (max-width: 768px) {
+  button {
+    width: 100%;
+    margin: 5px 0;
+    padding: 12px 15px;
+    font-size: 16px;
+  }
+
+  button.google {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .button-group button {
+    margin: 0;
+  }
+
+  .token-display {
+    word-break: break-all;
+    font-size: 0.8em;
+  }
+}

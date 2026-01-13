@@ -1,0 +1,93 @@
+.json-viewer {
+  display: flex;
+  flex-direction: column;
+  background: #f8f9fa;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  margin-top: 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-height: 60vh;
+  overflow: hidden;
+}
+
+.json-viewer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e1e1e1;
+  flex-shrink: 0;
+  background: #f8f9fa;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.json-viewer-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+.json-viewer-copy-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.json-viewer-copy-btn:hover {
+  background: #5a6268;
+}
+
+.json-viewer-copy-btn.copied {
+  background: #28a745;
+}
+
+.json-viewer-scroll {
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .json-viewer {
+    background: #1a1a1a;
+    border-color: #333;
+  }
+
+  .json-viewer-top {
+    border-bottom-color: #444;
+    background: #1a1a1a;
+  }
+
+  .json-viewer-title {
+    color: #e1e1e1;
+  }
+}
+
+@media (max-width: 768px) {
+  .json-viewer {
+    max-height: 400px;
+  }
+
+  .json-viewer-top {
+    padding: 8px 10px;
+  }
+
+  .json-viewer-scroll {
+    padding: 10px;
+  }
+
+  .json-viewer-copy-btn {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,140 @@
+.nav-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f8f9fa;
+  border-bottom: 2px solid #e1e1e1;
+  padding: 16px 24px;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.version-box {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e1e1e1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-size: 12px;
+  color: #333;
+  font-family: sans-serif;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.version-box .test-app {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.version-box .test-app .version {
+  font-weight: 700;
+}
+
+.version-box .mobiscroll {
+  font-size: 14px;
+  color: #666;
+}
+
+.version-box .mobiscroll .version {
+  font-weight: 600;
+}
+
+.nav-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  padding-right: 160px;
+}
+
+.nav-menu {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nav-menu a {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.nav-menu a:hover {
+  background: #014b9a;
+}
+
+.nav-menu a.active {
+  background: #014b9a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nav-header {
+    background: #1a1a1a;
+    border-bottom-color: #333;
+  }
+
+  .version-box {
+    background: rgba(30, 30, 30, 0.95);
+    border-color: #444;
+    color: #e1e1e1;
+  }
+
+  .version-box .mobiscroll {
+    color: #999;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-header {
+    padding: 12px 16px;
+    padding-top: 60px;
+    padding-right: 16px;
+  }
+
+  .nav-header h2 {
+    margin: 0 0 12px 0;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .nav-menu a {
+    width: 100%;
+    text-align: center;
+    padding: 8px 0px;
+  }
+
+  .version-box {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    font-size: 11px;
+    padding: 6px 10px;
+    text-align: center;
+    background-color: transparent;
+  }
+
+  .version-box .test-app {
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  .version-box .mobiscroll {
+    font-size: 12px;
+  }
+}

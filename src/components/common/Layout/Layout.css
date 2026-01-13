@@ -1,0 +1,12 @@
+.content {
+  font-family: sans-serif;
+  padding: 2em;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 1em;
+  }
+}
