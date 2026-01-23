@@ -12,8 +12,6 @@ export default function HomePage() {
   const [configVisible, setConfigVisible] = useState(true);
   const [configSaved, setConfigSaved] = useState(false);
   const [config, setConfig] = useState({
-    clientId: '',
-    clientSecret: '',
     userId: 'user-id',
   });
   const searchParams = useSearchParams();
@@ -28,20 +26,12 @@ export default function HomePage() {
   }, [searchParams]);
 
   const loadConfig = () => {
-    const savedClientId = localStorage.getItem('client_id') || defaultConfig.mobiscrollClientId;
-    const savedClientSecret = localStorage.getItem('client_secret') || defaultConfig.mobiscrollClientSecret;
-    const savedUserId = localStorage.getItem('user_id') || 'user-id';
-
     setConfig({
-      clientId: savedClientId || '',
-      clientSecret: savedClientSecret || '',
-      userId: savedUserId,
+      userId: localStorage.getItem('user_id') || 'user-id',
     });
   };
 
   const saveConfig = () => {
-    localStorage.setItem('client_id', config.clientId);
-    localStorage.setItem('client_secret', config.clientSecret);
     localStorage.setItem('user_id', config.userId);
     setConfigSaved(true);
     setTimeout(() => setConfigSaved(false), 2000);
@@ -61,8 +51,6 @@ export default function HomePage() {
 
   const connectCalendars = () => {
     const params = new URLSearchParams();
-    if (config.clientId) params.set('client_id', config.clientId);
-    if (config.clientSecret) params.set('client_secret', config.clientSecret);
     if (config.userId) params.set('user_id', config.userId);
 
     globalThis.location.href = `/api/auth?${params.toString()}`;
@@ -91,30 +79,6 @@ export default function HomePage() {
       {configVisible && (
         <div className="config-section bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg p-6 mb-6">
           <h3 className="text-xl font-semibold mb-4">Configuration</h3>
-
-          <div className="form-group mb-4">
-            <label className="block font-medium mb-2">Client ID</label>
-            <input
-              type="text"
-              value={config.clientId}
-              onChange={(e) => setConfig({ ...config, clientId: e.target.value })}
-              placeholder="Your OAuth client ID (GUID format)"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-800"
-            />
-            <small className="text-gray-600 dark:text-gray-400 text-sm">Your OAuth client ID (GUID format)</small>
-          </div>
-
-          <div className="form-group mb-4">
-            <label className="block font-medium mb-2">Client Secret</label>
-            <input
-              type="text"
-              value={config.clientSecret}
-              onChange={(e) => setConfig({ ...config, clientSecret: e.target.value })}
-              placeholder="Your OAuth client secret"
-              className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-800"
-            />
-            <small className="text-gray-600 dark:text-gray-400 text-sm">Your OAuth client secret</small>
-          </div>
 
           <div className="form-group mb-4">
             <label className="block font-medium mb-2">User ID</label>

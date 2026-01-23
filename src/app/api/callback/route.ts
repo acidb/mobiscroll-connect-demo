@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { getMobiscrollClient } from '@/lib/mobiscroll-client';
+import { defaultConfig } from '@/lib/default';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -12,18 +13,16 @@ export async function GET(request: NextRequest) {
   }
 
   const cookieStore = await cookies();
-  const clientId = cookieStore.get('temp_client_id')?.value;
-  const clientSecret = cookieStore.get('temp_client_secret')?.value;
+  const clientId = defaultConfig.mobiscrollClientId;
+  const clientSecret = defaultConfig.mobiscrollClientSecret;
 
   if (!clientId || !clientSecret) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
   try {
-    const client = getMobiscrollClient('temporary');
-    const callbackUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/callback`;
-
-    const tokenResponse = await client.auth.exchangeCodeForToken(code, clientId, clientSecret, callbackUrl);
+    const client = getMobiscrollClient();
+    const tokenResponse = await client.auth.getToken(code);
 
     cookieStore.set('access_token', tokenResponse.access_token, {
       httpOnly: true,
@@ -32,14 +31,18 @@ export async function GET(request: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    cookieStore.delete('temp_client_id');
-    cookieStore.delete('temp_client_secret');
+    if (tokenResponse.refresh_token) {
+      cookieStore.set('refresh_token', tokenResponse.refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 30,
+      });
+    }
 
     return NextResponse.redirect(new URL('/', request.url));
   } catch (error) {
     console.error('Token exchange failed:', error);
-    cookieStore.delete('temp_client_id');
-    cookieStore.delete('temp_client_secret');
     return NextResponse.redirect(new URL('/?error=auth_failed', request.url));
   }
 }

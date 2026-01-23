@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { getMobiscrollClient } from '@/lib/mobiscroll-client';
+import { getMobiscrollClient, configureMobiscrollClient } from '@/lib/mobiscroll-client';
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -28,21 +28,20 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const client = getMobiscrollClient(accessToken);
+    const client = getMobiscrollClient();
+    configureMobiscrollClient(client, cookieStore);
+    
     const events = await client.events.list({
       pageSize: Math.min(pageSize, 1000),
-      filters: {
-        start,
-        end,
-        calendarIds: calendarIds || {
-          google: [],
-          microsoft: [],
-          apple: [],
-        },
+      start,
+      end,
+      calendarIds: calendarIds || {
+        google: [],
+        microsoft: [],
+        apple: [],
       },
-      paging,
+      nextPageToken: paging,
       singleEvents,
-      accessToken,
     });
 
     return NextResponse.json(events);
@@ -67,15 +66,16 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const client = getMobiscrollClient(accessToken);
+    const client = getMobiscrollClient();
+    configureMobiscrollClient(client, cookieStore);
 
-    const { provider, ...eventData } = body;
+    const { provider } = body;
 
     if (!provider || !['google', 'microsoft', 'apple'].includes(provider)) {
       return NextResponse.json({ error: 'Valid provider (google, microsoft, apple) is required' }, { status: 400 });
     }
 
-    const event = await client.events.create(provider, eventData, { accessToken });
+    const event = await client.events.create(body);
 
     return NextResponse.json(event);
   } catch (error) {
@@ -94,15 +94,16 @@ export async function PUT(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const client = getMobiscrollClient(accessToken);
+    const client = getMobiscrollClient();
+    configureMobiscrollClient(client, cookieStore);
 
-    const { provider, ...eventData } = body;
+    const { provider } = body;
 
     if (!provider || !['google', 'microsoft', 'apple'].includes(provider)) {
       return NextResponse.json({ error: 'Valid provider (google, microsoft, apple) is required' }, { status: 400 });
     }
 
-    const event = await client.events.update(provider, eventData, { accessToken });
+    const event = await client.events.update(body);
 
     return NextResponse.json(event);
   } catch (error) {
@@ -121,13 +122,14 @@ export async function DELETE(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const client = getMobiscrollClient(accessToken);
+    const client = getMobiscrollClient();
+    configureMobiscrollClient(client, cookieStore);
 
     if (!body.provider || !['google', 'microsoft', 'apple'].includes(body.provider)) {
       return NextResponse.json({ error: 'Valid provider (google, microsoft, apple) is required in request body' }, { status: 400 });
     }
 
-    const result = await client.events.delete(body, { accessToken });
+    const result = await client.events.delete(body);
 
     return NextResponse.json(result);
   } catch (error) {

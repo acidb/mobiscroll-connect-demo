@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { getMobiscrollClient } from '@/lib/mobiscroll-client';
+import { getMobiscrollClient, configureMobiscrollClient } from '@/lib/mobiscroll-client';
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
@@ -11,8 +11,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const client = getMobiscrollClient(accessToken);
-    const calendars = await client.calendars.list({ accessToken });
+    const client = getMobiscrollClient();
+    configureMobiscrollClient(client, cookieStore);
+
+    const calendars = await client.calendars.list();
 
     return NextResponse.json(calendars);
   } catch (error) {
