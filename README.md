@@ -17,20 +17,19 @@ A Next.js demo application showcasing the Mobiscroll Connect Node SDK for managi
 ### Prerequisites
 
 - Node.js 20 or higher
-- Mobiscroll Connect server running (default: http://localhost:3000)
-- Valid OAuth client credentials from Mobiscroll Connect
+- Valid OAuth client credentials from Mobiscroll Connect dashboard
 
 ### Installation
 
-```bash
-# Install dependencies
-npm install
+   ```bash
+   npm install
+   ```
 
-# Copy environment variables
-cp .env.example .env.local
+3. **Configure environment:**
 
-# Edit .env.local with your credentials
-```
+   ```bash
+   cp .env.example .env.local
+   ```
 
 ### Environment Configuration
 
@@ -38,7 +37,7 @@ Edit `.env.local` with your configuration:
 
 ```env
 # Mobiscroll Connect API URL
-MOBISCROLL_CONNECT_URL=http://localhost:3000/api
+MOBISCROLL_CONNECT_URL=https://connect.mobiscroll.com/api
 
 # OAuth Client Credentials (keep client_secret private!)
 NEXT_PUBLIC_MOBISCROLL_CLIENT_ID=your-client-id
@@ -115,15 +114,18 @@ src/
 ## API Routes
 
 ### Authentication
+
 - `GET /api/auth` - Initiate OAuth flow
 - `GET /api/auth/status` - Check if user is authenticated
 - `GET /api/callback` - OAuth callback handler
 - `GET /api/logout` - Clear session and logout
 
 ### Calendar Operations
+
 - `GET /api/calendars` - List all calendars from connected providers
 
 ### Event Operations
+
 - `GET /api/events` - List events with filters (timeMin, timeMax, pageSize, singleEvents, paging)
 - `POST /api/events` - Create a new event
 - `PATCH /api/events` - Update an existing event
