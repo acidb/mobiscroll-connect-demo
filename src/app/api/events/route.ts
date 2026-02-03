@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { getMobiscrollClient, configureMobiscrollClient } from '@/lib/mobiscroll-client';
+import { getMobiscrollClient } from '@/lib/mobiscroll-client';
 
 export async function GET(request: NextRequest) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value;
-
-  if (!accessToken) {
-    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-  }
+  const client = getMobiscrollClient();
 
   const searchParams = request.nextUrl.searchParams;
   const start = searchParams.get('start') || undefined;
@@ -28,9 +22,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const client = getMobiscrollClient();
-    configureMobiscrollClient(client, cookieStore);
-    
     const events = await client.events.list({
       pageSize: Math.min(pageSize, 1000),
       start,
@@ -57,17 +48,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value;
-
-  if (!accessToken) {
-    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-  }
+  const client = getMobiscrollClient();
 
   try {
     const body = await request.json();
-    const client = getMobiscrollClient();
-    configureMobiscrollClient(client, cookieStore);
 
     const { provider } = body;
 
@@ -85,17 +69,10 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value;
-
-  if (!accessToken) {
-    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-  }
+  const client = getMobiscrollClient();
 
   try {
     const body = await request.json();
-    const client = getMobiscrollClient();
-    configureMobiscrollClient(client, cookieStore);
 
     const { provider } = body;
 
@@ -113,17 +90,10 @@ export async function PUT(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get('access_token')?.value;
-
-  if (!accessToken) {
-    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-  }
+  const client = getMobiscrollClient();
 
   try {
     const body = await request.json();
-    const client = getMobiscrollClient();
-    configureMobiscrollClient(client, cookieStore);
 
     if (!body.provider || !['google', 'microsoft', 'apple'].includes(body.provider)) {
       return NextResponse.json({ error: 'Valid provider (google, microsoft, apple) is required in request body' }, { status: 400 });

@@ -1,10 +1,8 @@
 import { MobiscrollConnectClient } from '@mobiscroll/connect-sdk';
 import { defaultConfig } from './default';
+import { loadTokens, saveTokens, clearTokens } from './token-storage';
 
-interface CookieStore {
-  get(name: string): { value: string } | undefined;
-  set(name: string, value: string, options?: any): void;
-}
+let globalClient: MobiscrollConnectClient | null = null;
 
 /**
  * Get a Mobiscroll Connect client instance
@@ -12,6 +10,10 @@ interface CookieStore {
  * NEVER expose client secret to the browser
  */
 export function getMobiscrollClient() {
+  if (globalClient) {
+    return globalClient;
+  }
+
   const clientId = defaultConfig.mobiscrollClientId;
   const clientSecret = defaultConfig.mobiscrollClientSecret;
   const redirectUri = defaultConfig.mobiscrollRedirectUri;
@@ -20,41 +22,26 @@ export function getMobiscrollClient() {
     throw new Error('Missing Mobiscroll Connect credentials in environment variables');
   }
 
-  return new MobiscrollConnectClient({
+  globalClient = new MobiscrollConnectClient({
     clientId,
     clientSecret,
     redirectUri,
   });
-}
 
-export function configureMobiscrollClient(client: MobiscrollConnectClient, cookieStore: CookieStore) {
-  const accessToken = cookieStore.get('access_token')?.value;
-  const refreshToken = cookieStore.get('refresh_token')?.value;
-
-  if (accessToken || refreshToken) {
-    client.setCredentials({
-      access_token: accessToken || '',
-      refresh_token: refreshToken,
-      token_type: 'Bearer',
-    });
+  const storedTokens = loadTokens();
+  if (storedTokens) {
+    globalClient.setCredentials(storedTokens);
   }
 
-  client.on('tokens', (tokens) => {
-    if (tokens.access_token) {
-      cookieStore.set('access_token', tokens.access_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7,
-      });
-    }
-    if (tokens.refresh_token) {
-      cookieStore.set('refresh_token', tokens.refresh_token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 30,
-      });
-    }
+  globalClient.on('tokens', (tokens) => {
+    saveTokens(tokens);
   });
+
+  return globalClient;
 }
+
+export function resetMobiscrollClient() {
+  globalClient = null;
+  clearTokens();
+}
+
