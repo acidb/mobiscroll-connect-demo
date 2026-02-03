@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
-import { resetMobiscrollClient } from '@/lib/mobiscroll-client';
+import { cookies } from 'next/headers';
 
 export async function GET() {
-  resetMobiscrollClient();
+  const cookieStore = await cookies();
+  cookieStore.delete('access_token');
 
   return NextResponse.redirect(new URL('/', process.env.NEXT_PUBLIC_APP_URL));
 }

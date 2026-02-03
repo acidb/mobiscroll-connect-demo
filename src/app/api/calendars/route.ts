@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getMobiscrollClient } from '@/lib/mobiscroll-client';
+import { cookies } from 'next/headers';
+import { getMobiscrollClient, configureMobiscrollClient } from '@/lib/mobiscroll-client';
 
 export async function GET(request: NextRequest) {
-  const client = getMobiscrollClient();
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('access_token')?.value;
+
+  if (!accessToken) {
+    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+  }
 
   try {
+    const client = getMobiscrollClient();
+    configureMobiscrollClient(client, cookieStore);
+
     const calendars = await client.calendars.list();
 
     return NextResponse.json(calendars);

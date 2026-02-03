@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { getMobiscrollClient } from '@/lib/mobiscroll-client';
 import { defaultConfig } from '@/lib/default';
-import { saveTokens, Tokens } from '@/lib/token-storage';
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -12,6 +12,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/api/logout', request.url));
   }
 
+  const cookieStore = await cookies();
   const clientId = defaultConfig.mobiscrollClientId;
   const clientSecret = defaultConfig.mobiscrollClientSecret;
 
@@ -21,8 +22,23 @@ export async function GET(request: NextRequest) {
 
   try {
     const client = getMobiscrollClient();
-    const tokens = await client.auth.getToken(code);
-    saveTokens(tokens as Tokens);
+    const tokenResponse = await client.auth.getToken(code);
+
+    cookieStore.set('access_token', tokenResponse.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7,
+    });
+
+    if (tokenResponse.refresh_token) {
+      cookieStore.set('refresh_token', tokenResponse.refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 30,
+      });
+    }
 
     return NextResponse.redirect(new URL('/', request.url));
   } catch (error) {

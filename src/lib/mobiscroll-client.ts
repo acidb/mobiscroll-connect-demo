@@ -1,8 +1,10 @@
 import { MobiscrollConnectClient } from '@mobiscroll/connect-sdk';
 import { defaultConfig } from './default';
-import { loadTokens, saveTokens, clearTokens } from './token-storage';
 
-let globalClient: MobiscrollConnectClient | null = null;
+interface CookieStore {
+  get(name: string): { value: string } | undefined;
+  set(name: string, value: string, options?: any): void;
+}
 
 /**
  * Get a Mobiscroll Connect client instance
@@ -10,10 +12,6 @@ let globalClient: MobiscrollConnectClient | null = null;
  * NEVER expose client secret to the browser
  */
 export function getMobiscrollClient() {
-  if (globalClient) {
-    return globalClient;
-  }
-
   const clientId = defaultConfig.mobiscrollClientId;
   const clientSecret = defaultConfig.mobiscrollClientSecret;
   const redirectUri = defaultConfig.mobiscrollRedirectUri;
@@ -22,26 +20,41 @@ export function getMobiscrollClient() {
     throw new Error('Missing Mobiscroll Connect credentials in environment variables');
   }
 
-  globalClient = new MobiscrollConnectClient({
+  return new MobiscrollConnectClient({
     clientId,
     clientSecret,
     redirectUri,
   });
+}
 
-  const storedTokens = loadTokens();
-  if (storedTokens) {
-    globalClient.setCredentials(storedTokens);
+export function configureMobiscrollClient(client: MobiscrollConnectClient, cookieStore: CookieStore) {
+  const accessToken = cookieStore.get('access_token')?.value;
+  const refreshToken = cookieStore.get('refresh_token')?.value;
+
+  if (accessToken || refreshToken) {
+    client.setCredentials({
+      access_token: accessToken || '',
+      refresh_token: refreshToken,
+      token_type: 'Bearer',
+    });
   }
 
-  globalClient.on('tokens', (tokens) => {
-    saveTokens(tokens);
+  client.on('tokens', (tokens) => {
+    if (tokens.access_token) {
+      cookieStore.set('access_token', tokens.access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+    if (tokens.refresh_token) {
+      cookieStore.set('refresh_token', tokens.refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 30,
+      });
+    }
   });
-
-  return globalClient;
 }
-
-export function resetMobiscrollClient() {
-  globalClient = null;
-  clearTokens();
-}
-
