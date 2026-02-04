@@ -36,9 +36,6 @@ A Next.js demo application showcasing the Mobiscroll Connect Node SDK for managi
 Edit `.env.local` with your configuration:
 
 ```env
-# Mobiscroll Connect API URL
-MOBISCROLL_CONNECT_URL=https://connect.mobiscroll.com/api
-
 # OAuth Client Credentials (keep client_secret private!)
 NEXT_PUBLIC_MOBISCROLL_CLIENT_ID=your-client-id
 NEXT_PUBLIC_MOBISCROLL_CLIENT_SECRET=your-client-secret
@@ -104,7 +101,7 @@ src/
 
 ## Application Flow
 
-1. **Home Page** - Configure credentials (optional, uses environment variables) and initiate OAuth
+1. **Home Page** - Set user id and initiate OAuth
 2. **Authentication** - Redirects to Mobiscroll Connect for provider selection and OAuth
 3. **Callback** - Handles OAuth callback, stores access token in HTTP-only cookie
 4. **Calendars** - Browse connected calendars from all providers
