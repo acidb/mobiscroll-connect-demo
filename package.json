@@ -10,7 +10,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@mobiscroll/connect-sdk": "file:../mobiscroll-connect-node",
+    "@mobiscroll/connect-sdk": "^0.1.0",
     "axios": "^1.7.9",
     "dotenv": "^17.2.2",
     "next": "^16.1.1",
