@@ -25,7 +25,7 @@ A Next.js demo application showcasing the Mobiscroll Connect Node SDK for managi
    npm install
    ```
 
-3. **Configure environment:**
+**Configure environment:**
 
    ```bash
    cp .env.example .env.local
@@ -46,6 +46,11 @@ PORT=3001
 ```
 
 **Development Mode:** You can also use `NEXT_PUBLIC_MOBISCROLL_CLIENT_ID_DEV` and `NEXT_PUBLIC_MOBISCROLL_CLIENT_SECRET_DEV` for separate development credentials.
+
+> **Note:**  
+> In production, you can use a `.env` or `.env.local` file on your server to provide environment variables, or set them directly in your hosting environment.  
+> `.env.local` overrides `.env` if both are present.  
+> **Never commit secrets to your repository.**
 
 ### Development
 
