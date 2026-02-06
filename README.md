@@ -36,13 +36,15 @@ A Next.js demo application showcasing the Mobiscroll Connect Node SDK for managi
 Edit `.env.local` with your configuration:
 
 ```env
-# OAuth Client Credentials (keep client_secret private!)
+NEXT_PUBLIC_NODE_ENV=development
+
+# OAuth Client Credentials (NEVER expose client_secret to browser)
 NEXT_PUBLIC_MOBISCROLL_CLIENT_ID=your-client-id
 NEXT_PUBLIC_MOBISCROLL_CLIENT_SECRET=your-client-secret
+NEXT_PUBLIC_REDIRECT_URI=http://localhost:3001/api/callback
 
-# Application URL
+# App configuration
 NEXT_PUBLIC_APP_URL=http://localhost:3001
-PORT=3001
 ```
 
 **Development Mode:** You can also use `NEXT_PUBLIC_MOBISCROLL_CLIENT_ID_DEV` and `NEXT_PUBLIC_MOBISCROLL_CLIENT_SECRET_DEV` for separate development credentials.
