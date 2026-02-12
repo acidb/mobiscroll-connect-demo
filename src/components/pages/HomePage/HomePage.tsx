@@ -58,9 +58,10 @@ export default function HomePage() {
   };
 
   const connectCalendars = () => {
-    const params = new URLSearchParams();
-    if (config.providers.length > 0) params.set('providers', config.providers.join(','));
-    if (config.userId) params.set('user_id', config.userId);
+    const params = new URLSearchParams({
+      user_id: config.userId,
+      providers: config.providers.join(','),
+    });
 
     globalThis.location.href = `/api/auth?${params.toString()}`;
   };
