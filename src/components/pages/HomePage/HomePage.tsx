@@ -13,6 +13,7 @@ export default function HomePage() {
   const [configSaved, setConfigSaved] = useState(false);
   const [config, setConfig] = useState({
     userId: 'user-id',
+    providers: ['google', 'apple', 'microsoft', 'caldav'],
   });
   const searchParams = useSearchParams();
 
@@ -26,13 +27,20 @@ export default function HomePage() {
   }, [searchParams]);
 
   const loadConfig = () => {
+    const providersString = localStorage.getItem('providers') || 'google,apple,microsoft,caldav';
+    const providers = providersString
+      .split(',')
+      .map((p) => p.trim())
+      .filter(Boolean);
     setConfig({
       userId: localStorage.getItem('user_id') || 'user-id',
+      providers,
     });
   };
 
   const saveConfig = () => {
     localStorage.setItem('user_id', config.userId);
+    localStorage.setItem('providers', config.providers.join(','));
     setConfigSaved(true);
     setTimeout(() => setConfigSaved(false), 2000);
   };
@@ -51,6 +59,7 @@ export default function HomePage() {
 
   const connectCalendars = () => {
     const params = new URLSearchParams();
+    if (config.providers.length > 0) params.set('providers', config.providers.join(','));
     if (config.userId) params.set('user_id', config.userId);
 
     globalThis.location.href = `/api/auth?${params.toString()}`;
@@ -90,6 +99,40 @@ export default function HomePage() {
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-800"
             />
             <small className="text-gray-600 dark:text-gray-400 text-sm">Unique identifier for the user</small>
+          </div>
+
+          <div className="form-group mb-4 w-1/4">
+            <label className="block font-medium mb-2">Providers</label>
+
+            <table className="checkbox-group w-full mb-1">
+              <tbody>
+                {['google', 'apple', 'microsoft', 'caldav'].map((provider) => (
+                  <tr key={provider} className="align-middle">
+                    <td className="align-middle py-1">
+                      <label className="capitalize" htmlFor={`provider-${provider}`}>
+                        {provider === 'caldav' ? 'CalDAV' : provider}
+                      </label>
+                    </td>
+                    <td className="align-middle py-1">
+                      <input
+                        id={`provider-${provider}`}
+                        type="checkbox"
+                        checked={config.providers.includes(provider)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setConfig({ ...config, providers: [...config.providers, provider] });
+                          } else {
+                            setConfig({ ...config, providers: config.providers.filter((p) => p !== provider) });
+                          }
+                        }}
+                        className="w-4 h-4 align-middle"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <small className="text-gray-600 dark:text-gray-400 text-sm">Which providers to show on the authorize screen</small>
           </div>
 
           <button className="bg-blue-600" onClick={saveConfig}>
