@@ -23,7 +23,7 @@
     "@types/node": "^25.0.3",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.0",
     "eslint-config-next": "^16.1.1",
     "postcss": "^8.4.49",
     "prettier": "^3.7.3",
