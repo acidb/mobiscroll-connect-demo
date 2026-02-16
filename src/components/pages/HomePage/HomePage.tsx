@@ -89,6 +89,10 @@ export default function HomePage() {
       {configVisible && (
         <div className="config-section bg-gray-50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg p-6 mb-6">
           <h3 className="text-xl font-semibold mb-4">Configuration</h3>
+          <p className="text-gray-700 dark:text-gray-300 mb-4">
+            These settings control how the Demo App identifies a user&apos;s account and which calendar providers appear on the
+            authorization screen.
+          </p>
 
           <div className="form-group mb-4">
             <label className="block font-medium mb-2">User ID</label>
@@ -99,13 +103,15 @@ export default function HomePage() {
               placeholder="user-id"
               className="w-full px-3 py-2 border border-gray-300 dark:border-zinc-600 rounded bg-white dark:bg-zinc-800"
             />
-            <small className="text-gray-600 dark:text-gray-400 text-sm">Unique identifier for the user</small>
+            <small className="text-gray-600 dark:text-gray-400 text-sm">
+              This is the unique identifier your app passes to Mobiscroll Connect so calendar data is linked to the correct end user.
+            </small>
           </div>
 
-          <div className="form-group mb-4 w-1/4">
+          <div className="form-group mb-4 w-1/2">
             <label className="block font-medium mb-2">Providers</label>
 
-            <table className="checkbox-group w-full mb-1">
+            <table className="checkbox-group w-1/3 mb-1">
               <tbody>
                 {['google', 'apple', 'microsoft', 'caldav'].map((provider) => (
                   <tr key={provider} className="align-middle">
@@ -133,7 +139,10 @@ export default function HomePage() {
                 ))}
               </tbody>
             </table>
-            <small className="text-gray-600 dark:text-gray-400 text-sm">Which providers to show on the authorize screen</small>
+            <small className="text-gray-600 dark:text-gray-400 text-sm">
+              Select which providers to show on the authorization screen. Only checked providers will be available for connection. If none
+              is selected, it defaults to all providers being shown.
+            </small>
           </div>
 
           <button className="bg-blue-600" onClick={saveConfig}>
