@@ -44,6 +44,12 @@ export default function EventsPage() {
     })(),
     pageSize: 100,
     singleEvents: true,
+    calendarIds: {
+      google: [],
+      microsoft: [],
+      apple: [],
+      caldav: [],
+    },
   });
 
   const loadEvents = async (reset = false, loadMore = false) => {
@@ -61,6 +67,7 @@ export default function EventsPage() {
       end: `${filters.timeMax}:59Z`,
       pageSize: filters.pageSize.toString(),
       singleEvents: filters.singleEvents.toString(),
+      calendarIds: JSON.stringify(filters.calendarIds),
     });
 
     if (loadMore && paging) {
@@ -91,6 +98,7 @@ export default function EventsPage() {
           end: `${filters.timeMax}:59Z`,
           pageSize: filters.pageSize,
           singleEvents: filters.singleEvents,
+          calendarIds: filters.calendarIds,
           paging: loadMore && paging ? paging : undefined,
         },
       });

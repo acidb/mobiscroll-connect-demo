@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
   try {
     const client = getMobiscrollClient();
     configureMobiscrollClient(client, cookieStore);
-    
+
     const events = await client.events.list({
       pageSize: Math.min(pageSize, 1000),
       start,
