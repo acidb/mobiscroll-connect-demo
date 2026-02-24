@@ -5,8 +5,9 @@ import { getMobiscrollClient, configureMobiscrollClient } from '@/lib/mobiscroll
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('access_token')?.value;
+  const refreshToken = cookieStore.get('refresh_token')?.value;
 
-  if (!accessToken) {
+  if (!accessToken && !refreshToken) {
     return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
   }
 
