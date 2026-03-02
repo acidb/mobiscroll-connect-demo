@@ -21,8 +21,8 @@ export default function HomePage() {
     checkAuthStatus();
     loadConfig();
 
-    if (searchParams.get('error') === 'auth_failed') {
-      setError('Authentication failed. Please try again.');
+    if (searchParams.get('error') === 'token_exchange_failed') {
+      setError('Authentication failed. Please check your client ID, client secret, and redirect URI configuration and try again.');
     }
   }, [searchParams]);
 

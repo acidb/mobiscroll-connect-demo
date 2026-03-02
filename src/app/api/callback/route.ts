@@ -43,6 +43,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   } catch (error) {
     console.error('Token exchange failed:', error);
-    return NextResponse.redirect(new URL('/?error=auth_failed', request.url));
+    return NextResponse.redirect(new URL(`/?error=token_exchange_failed`, request.url));
   }
 }
